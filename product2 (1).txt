@@ -1,0 +1,65 @@
+1. Посчитать возможную выручку за хлеб и молоко (с учётом скидок на эти товары)
+
+SELECT
+    SUM(price * quantity * (1 - discount / 100)) AS total_revenue
+FROM
+    Product
+WHERE
+    name IN ('Хлеб', 'Молоко');
+
+2. Получить информацию о том, каких товаров вчера и сегодня доставили более 10 штук (getdate, dateadd)
+
+SELECT
+    *
+FROM
+    Product
+WHERE
+    date_of_delivery >= DATEADD(DAY, -1, GETDATE())
+    AND quantity > 10;
+
+10. Уменьшить цены на все товары на 5% (запросом на UPDATE)
+
+UPDATE
+    Product
+SET
+    price = price * 0.95;
+
+11. Проставить сегодняшнюю дату доставки на все товары, в которых такая информация отсутствует
+(это тоже UPDATE)
+
+UPDATE
+    Product
+SET
+    date_of_delivery = GETDATE()
+WHERE
+    date_of_delivery IS NULL;
+
+12. Удалить все товары, количество которых меньше 100, а цена более 70 гривен
+
+DELETE FROM
+    Product
+WHERE
+    quantity < 100
+    AND price > 70;
+
+13. Удалить все алкогольные напитки и кондитерские изделия
+
+DELETE FROM
+    Product
+WHERE
+    category IN ('Алкогольні напої', 'Кондитерські вироби');
+
+16. Удалить все товары, дата доставки которых была более 3 месяцев назад от текущей даты 
+
+DELETE FROM
+    Product
+WHERE
+    date_of_delivery < DATEADD(MONTH, -3, GETDATE());
+
+18. Удалить все товары, информация о производителе которых неизвестна, или же если скидка на эти товары более 10%
+
+DELETE FROM
+    Product
+WHERE
+    producer IS NULL
+    OR discount > 10;
